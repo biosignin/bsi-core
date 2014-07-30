@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>eu.inn.biometric.sign</groupId>
+	<artifactId>bsi-core</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcmail-jdk15on</artifactId>
+			<version>1.48</version>
+		</dependency>
+	</dependencies>
+	<scm>
+		<connection>scm:git:ssh://github.com/innoverygroup/bsi-core.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/innoverygroup/bsi-core.git</developerConnection>
+		<url>https://github.com/innoverygroup/bsi-core</url>
+		<tag>HEAD</tag>
+	</scm>
+	<distributionManagement>
+		<repository>
+			<id>InnoveryRelease</id>
+			<name>Innovery Public Releases</name>
+			<url>http://192.168.1.69:8080/artifactory/libs-release-local</url>
+		</repository>
+	</distributionManagement>
+</project>
