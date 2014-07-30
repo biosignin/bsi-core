@@ -33,7 +33,7 @@
 		<repository>
 			<id>InnoveryRelease</id>
 			<name>Innovery Public Releases</name>
-			<url>http://192.168.1.69:8080/artifactory/libs-release-local</url>
+			<url>http://developers.innovery.net/artifactory/public-release</url>
 		</repository>
 	</distributionManagement>
 </project>
