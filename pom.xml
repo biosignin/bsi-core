@@ -19,9 +19,22 @@
 				<version>2.4.1</version>
 				<configuration>
 					<tagNameFormat>v@{project.version}</tagNameFormat>
+					<releaseProfiles>release</releaseProfiles>
 					<preparationGoals>clean verify</preparationGoals>
-					<goals>deploy</goals>
+					<goals>deploy site</goals>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-api</artifactId>
+						<version>1.8.1</version>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-provider-gitexe</artifactId>
+						<version>1.8.1</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 
 		</plugins>
