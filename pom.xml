@@ -24,8 +24,8 @@
 		</dependency>
 	</dependencies>
 	<scm>
-		<connection>scm:git:git://github.com/innoverygroup/bsi-core.git</connection>
-		<developerConnection>scm:git:git://git@github.com/innoverygroup/bsi-core.git</developerConnection>
+		<connection>scm:git:ssh://github.com/innoverygroup/bsi-core.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/innoverygroup/bsi-core.git</developerConnection>
 		<url>https://github.com/innoverygroup/bsi-core</url>
 		<tag>HEAD</tag>
 	</scm>
