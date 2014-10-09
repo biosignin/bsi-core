@@ -102,3 +102,29 @@ void decrypt(byte[] encryptedBytes, PrivateKey privateKey) {
 	IsoSignatureData dec = enc.decrypt(IsoSignatureData.class);
 }
 ```
+##Requirements
+* JDK 1.7 (due to a [bug](https://java.net/jira/browse/JAXB-890) on xml deserialization on JDK 1.6)
+* [BouncyCastle](https://www.bouncycastle.org/java.html)
+
+#####Include in your maven project
+```xml
+<project>
+	[.......]
+	<dependencies>
+    	[.......]
+		<dependency>
+			<groupId>eu.inn.biometric.sign</groupId>
+			<artifactId>bsi-core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>
+	<distributionManagement>
+		<repository>
+			<id>InnoveryRelease</id>
+			<name>Innovery Public Releases</name>
+			<url>http://developers.innovery.net/artifactory/public-release</url>
+		</repository>
+	</distributionManagement>
+</project>
+
+```
