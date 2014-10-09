@@ -61,6 +61,12 @@ public class IsoSignatureData implements IBdi, Cloneable {
 		return ser.deserialize(doc);
 	}
 
+	public static IsoSignatureData fromIso(byte[] isoData) {
+		IsoSignatureData ret = new IsoSignatureData();
+		ret.isoData=isoData;
+		return ret;
+	}
+	
 	public IsoIec19794Signature getIsoSignature() {
 		if (isoSignature == null)
 			try {
