@@ -31,27 +31,17 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.transform.RegistryMatcher;
 
-import eu.inn.biometric.signature.extendeddata.ExtendedData;
-
-public class JaxbSerializer<T> {
+public class XmlSerializer<T> {
 	private Serializer marshaller;
 
 	private Class<T> classType;
 
-	public JaxbSerializer(Class<T> classe) {
+	public XmlSerializer(Class<T> classe) {
 		classType = classe;
 		try {
-//			Registry registry = new Registry();
-//			registry.bind(byte[].class, ByteArrayConverter.class);
-//			Strategy strategy = new RegistryStrategy(registry);
-			
-			
-			
 			RegistryMatcher m = new RegistryMatcher();
 			m.bind(byte[].class, new ByteArrayTransformer());
 			marshaller = new Persister(m);
-			
-			
 		} catch (Exception ex) {
 			throw new RuntimeException("Cannot instantiate JaxbSerializer for class: " + classType.getName(), ex);
 		}

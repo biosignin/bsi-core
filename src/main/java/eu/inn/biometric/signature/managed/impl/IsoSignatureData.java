@@ -49,7 +49,7 @@ import eu.inn.biometric.signature.isoiec19794.y2007.IsoPoint;
 import eu.inn.biometric.signature.managed.IBdi;
 import eu.inn.biometric.signature.managed.ManagedIsoPoint;
 import eu.inn.biometric.signature.utils.MetricConversion;
-import eu.inn.serialization.JaxbSerializer;
+import eu.inn.serialization.XmlSerializer;
 
 @Root
 public class IsoSignatureData implements IBdi, Cloneable {
@@ -60,7 +60,7 @@ public class IsoSignatureData implements IBdi, Cloneable {
 	@Element
 	private byte[] isoData;
 
-	private static JaxbSerializer<IsoSignatureData> ser = new JaxbSerializer<IsoSignatureData>(IsoSignatureData.class);
+	private static XmlSerializer<IsoSignatureData> ser = new XmlSerializer<IsoSignatureData>(IsoSignatureData.class);
 
 	public static IsoSignatureData fromXmlDocument(String doc) {
 		return ser.deserialize(doc);
