@@ -103,8 +103,9 @@ void decrypt(byte[] encryptedBytes, PrivateKey privateKey) {
 }
 ```
 ##Requirements
-* JDK 1.7 (due to a [bug](https://java.net/jira/browse/JAXB-890) on xml deserialization on JDK 1.6)
-* [BouncyCastle](https://www.bouncycastle.org/java.html)
+* Java6
+* [Simple Xml Serialization](http://simple.sourceforge.net/)
+* [BSI Crypto Provider based on BC](https://github.com/biosignin/bc-crypto-bsi) (optional)
 
 #####Include in your maven project
 ```xml
@@ -115,7 +116,13 @@ void decrypt(byte[] encryptedBytes, PrivateKey privateKey) {
 		<dependency>
 			<groupId>eu.inn.biometric.sign</groupId>
 			<artifactId>bsi-core</artifactId>
+			<version>0.0.2</version>
+		</dependency>
+		<dependency>   <!-- you can either use your own cryptographic implementation -->
+			<groupId>eu.inn.biometric.sign</groupId>
+			<artifactId>bc-crypto-bsi</artifactId>	
 			<version>0.0.1</version>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 	<distributionManagement>
