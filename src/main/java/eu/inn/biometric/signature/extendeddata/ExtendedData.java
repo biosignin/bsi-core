@@ -1,9 +1,9 @@
-package eu.inn.java.extensions;
+package eu.inn.biometric.signature.extendeddata;
 
 /*
  * #%L
  * BioSignIn (Biometric Signature Interface) Core [http://www.biosignin.org]
- * RefObject.java is part of BioSignIn project
+ * ExtendedData.java is part of BioSignIn project
  * %%
  * Copyright (C) 2014 Innovery SpA
  * %%
@@ -23,16 +23,24 @@ package eu.inn.java.extensions;
  */
 
 
-public final class RefObject<T> {
-	public T argvalue;
+import java.util.UUID;
 
-	public RefObject(T refarg) {
-		argvalue = refarg;
-	}
-	public RefObject() {
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
+@Root
+public class ExtendedData {
+
+	@Attribute
+	private String key = UUID.randomUUID().toString();
+
+	public final String getKey() {
+		return key;
 	}
 	
-	public boolean isNull() {
-		return argvalue==null;
+	public final void setKey(String key) {
+		this.key = key;
 	}
+
+
 }

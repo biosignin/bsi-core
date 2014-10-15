@@ -4,14 +4,50 @@
 	<groupId>eu.inn.biometric.sign</groupId>
 	<artifactId>bsi-core</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
+	<inceptionYear>2014</inceptionYear>
+	<description>BioSignIn (Biometric Signature Interface) Core</description>	
+	<organization>
+		<name>Innovery SpA</name>
+		<url>http://www.biosignin.org</url>
+	</organization>
 	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.6</source>
+					<target>1.6</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.7</version>
+				<configuration>
+					<descriptionTemplate>${basedir}/src/license/myDescriptionTemplate.ftl</descriptionTemplate>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
+						<configuration>
+							<licenseName>agpl_v3</licenseName>
+							<roots>
+								<root>src/main</root>
+							</roots>
+						</configuration>
+					</execution>
+					<execution>
+						<id>download-licenses</id>
+						<goals>
+							<goal>download-licenses</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -41,15 +77,15 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcmail-jdk15on</artifactId>
-			<version>1.48</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.1</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.simpleframework</groupId>
+			<artifactId>simple-xml</artifactId>
+			<version>2.7.1</version>
 		</dependency>
 	</dependencies>
 	<scm>

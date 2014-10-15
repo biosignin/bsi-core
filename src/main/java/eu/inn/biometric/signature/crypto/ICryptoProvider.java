@@ -1,9 +1,9 @@
-package eu.inn.java.extensions;
+package eu.inn.biometric.signature.crypto;
 
 /*
  * #%L
  * BioSignIn (Biometric Signature Interface) Core [http://www.biosignin.org]
- * RefObject.java is part of BioSignIn project
+ * ICryptoProvider.java is part of BioSignIn project
  * %%
  * Copyright (C) 2014 Innovery SpA
  * %%
@@ -23,16 +23,14 @@ package eu.inn.java.extensions;
  */
 
 
-public final class RefObject<T> {
-	public T argvalue;
+import java.util.List;
+import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
+public interface ICryptoProvider {
 
-	public RefObject(T refarg) {
-		argvalue = refarg;
-	}
-	public RefObject() {
-	}
-	
-	public boolean isNull() {
-		return argvalue==null;
-	}
+	byte[] encrypt(byte[] data, List<X509Certificate> certs, Integer maxKeyLength) throws Exception;
+	byte[] decrypt(byte[] data, PrivateKey key);
+	byte[] b64Encode(byte[] data);
+	byte[] b64Decode(byte[] data);
+	void addProvider();
 }

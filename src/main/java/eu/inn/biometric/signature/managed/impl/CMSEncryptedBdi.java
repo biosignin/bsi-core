@@ -1,33 +1,53 @@
 package eu.inn.biometric.signature.managed.impl;
 
+/*
+ * #%L
+ * BioSignIn (Biometric Signature Interface) Core [http://www.biosignin.org]
+ * CMSEncryptedBdi.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
 import java.security.PrivateKey;
-import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.ServiceLoader;
 
-import javax.crypto.Cipher;
+//import org.bouncycastle.util.encoders.Base64;
 
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.cms.CMSAlgorithm;
-import org.bouncycastle.cms.CMSEnvelopedData;
-import org.bouncycastle.cms.CMSEnvelopedDataGenerator;
-import org.bouncycastle.cms.CMSProcessableByteArray;
-import org.bouncycastle.cms.CMSTypedData;
-import org.bouncycastle.cms.KeyTransRecipientInformation;
-import org.bouncycastle.cms.jcajce.JceCMSContentEncryptorBuilder;
-import org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient;
-import org.bouncycastle.cms.jcajce.JceKeyTransRecipientInfoGenerator;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Base64;
-
+import eu.inn.biometric.signature.crypto.ICryptoProvider;
 import eu.inn.biometric.signature.managed.IBdi;
 import eu.inn.biometric.signature.managed.IEncryptedBdi;
+import eu.inn.serialization.ByteArrayTransformer;
 
 public class CMSEncryptedBdi<T extends IBdi> implements IEncryptedBdi<T> {
 	private PrivateKey pKey = null;
+	private static ICryptoProvider provider = null;
 	static {
-		if (Security.getProvider("BC") == null)
-			Security.addProvider(new BouncyCastleProvider());
+		try {
+			ServiceLoader<ICryptoProvider> loader = ServiceLoader.load(ICryptoProvider.class,
+					ByteArrayTransformer.class.getClassLoader());
+			provider = loader.iterator().next();
+			provider.addProvider();
+		} catch (Exception e) {
+			System.err.println("No CryptoProvider defined");
+			e.printStackTrace();
+		}
 	}
 	private byte[] cmsBytes;
 
@@ -38,7 +58,6 @@ public class CMSEncryptedBdi<T extends IBdi> implements IEncryptedBdi<T> {
 	}
 
 	private CMSEncryptedBdi() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public PrivateKey getPKey() {
@@ -52,32 +71,11 @@ public class CMSEncryptedBdi<T extends IBdi> implements IEncryptedBdi<T> {
 	@SuppressWarnings("unchecked")
 	public T decrypt(Class<T> clazz) {
 		try {
-			byte[] decData = decrypt();
+			byte[] decData = provider.decrypt(cmsBytes, pKey);
 
 			if (clazz == IsoSignatureData.class)
 				return (T) IsoSignatureData.fromXmlDocument(new String(decData));
 			throw new UnsupportedOperationException("Cannot decrypt object of type " + clazz.getName());
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-
-	}
-
-	private byte[] decrypt() {
-		try {
-
-			CMSEnvelopedData enveloped = new CMSEnvelopedData(cmsBytes);
-
-			for (Object recip : enveloped.getRecipientInfos().getRecipients()) {
-				try {
-					KeyTransRecipientInformation rinfo = (KeyTransRecipientInformation) recip;
-					byte[] decryptedDocument = rinfo.getContent(new JceKeyTransEnvelopedRecipient(pKey));
-					return decryptedDocument;
-				} catch (Exception ex) {
-				}
-			}
-			throw new RuntimeException("Cannot decrypt");
-
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
@@ -93,25 +91,14 @@ public class CMSEncryptedBdi<T extends IBdi> implements IEncryptedBdi<T> {
 			Integer maxKeyLength) throws Exception {
 		if (sdc.isEncrypted())
 			throw new IllegalStateException("Object is already encrypted");
-		int keySize = Cipher.getMaxAllowedKeyLength("AES");
-		if (maxKeyLength != null)
-			if (keySize > maxKeyLength)
-				keySize = maxKeyLength;
-		String algIdentifier = CMSAlgorithm.AES128_CBC.getId();
-		if (keySize >= 256)
-			algIdentifier = CMSAlgorithm.AES256_CBC.getId();
-		CMSEnvelopedDataGenerator gen = new CMSEnvelopedDataGenerator();
-		for (X509Certificate cert : certificate)
-			gen.addRecipientInfoGenerator(new JceKeyTransRecipientInfoGenerator(cert));
-		CMSTypedData data = new CMSProcessableByteArray(sdc.toOutput().getBytes("UTF-8"));
-		CMSEnvelopedData enveloped = gen.generate(data, new JceCMSContentEncryptorBuilder(new ASN1ObjectIdentifier(
-				algIdentifier)).build());
-		return CMSEncryptedBdi.fromCMSbytes(enveloped.getEncoded());
+		return CMSEncryptedBdi.fromCMSbytes(provider.encrypt(sdc.toOutput().getBytes("UTF-8"), certificate,
+				maxKeyLength));
+
 	}
 
 	@Override
 	public String toOutput() throws RuntimeException {
-		return new String(Base64.encode(cmsBytes));
+		return new String(provider.b64Encode(cmsBytes));
 	}
 
 }

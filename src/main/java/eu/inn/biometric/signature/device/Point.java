@@ -1,9 +1,9 @@
-package eu.inn.java.extensions;
+package eu.inn.biometric.signature.device;
 
 /*
  * #%L
  * BioSignIn (Biometric Signature Interface) Core [http://www.biosignin.org]
- * RefObject.java is part of BioSignIn project
+ * Point.java is part of BioSignIn project
  * %%
  * Copyright (C) 2014 Innovery SpA
  * %%
@@ -23,16 +23,32 @@ package eu.inn.java.extensions;
  */
 
 
-public final class RefObject<T> {
-	public T argvalue;
+public class Point {
+	private int x;
+	private int y;
 
-	public RefObject(T refarg) {
-		argvalue = refarg;
+	public Point() {
 	}
-	public RefObject() {
+
+	public int getX() {
+		return x;
 	}
-	
-	public boolean isNull() {
-		return argvalue==null;
+
+	public void setX(int x) {
+		this.x = x;
 	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public Point(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
 }

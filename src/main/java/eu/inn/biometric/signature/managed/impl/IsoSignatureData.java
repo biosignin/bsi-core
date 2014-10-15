@@ -1,25 +1,45 @@
 package eu.inn.biometric.signature.managed.impl;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ServiceLoader;
+/*
+ * #%L
+ * BioSignIn (Biometric Signature Interface) Core [http://www.biosignin.org]
+ * IsoSignatureData.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+
+//import java.awt.Dimension;
+//import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Order;
+import org.simpleframework.xml.Root;
 
 import eu.inn.biometric.signature.device.CapturingComponent;
+import eu.inn.biometric.signature.device.Dimension;
 import eu.inn.biometric.signature.device.MetricUnits;
+import eu.inn.biometric.signature.device.Point;
 import eu.inn.biometric.signature.device.RealSize;
 import eu.inn.biometric.signature.device.SignArea;
-import eu.inn.biometric.signature.extendeddata.AbstractExtendedData;
+import eu.inn.biometric.signature.extendeddata.ExtendedData;
 import eu.inn.biometric.signature.isoiec19794.y2007.Channel;
 import eu.inn.biometric.signature.isoiec19794.y2007.ChannelAttribute;
 import eu.inn.biometric.signature.isoiec19794.y2007.ChannelDescription;
@@ -31,31 +51,16 @@ import eu.inn.biometric.signature.managed.ManagedIsoPoint;
 import eu.inn.biometric.signature.utils.MetricConversion;
 import eu.inn.serialization.JaxbSerializer;
 
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement()
-@XmlType(propOrder = {})
+@Root
 public class IsoSignatureData implements IBdi, Cloneable {
 
-	@XmlElementWrapper
-	@XmlAnyElement(lax = true)
-	private List<AbstractExtendedData> extendedDatas = new ArrayList<AbstractExtendedData>();
+	@ElementList()	
+	private ArrayList<ExtendedData> extendedDatas = new ArrayList<ExtendedData>();
 
-	@XmlElement()
+	@Element
 	private byte[] isoData;
 
-	static {
-		ServiceLoader<AbstractExtendedData> loader = ServiceLoader.load(AbstractExtendedData.class,
-				IsoSignatureData.class.getClassLoader());
-		Iterator<AbstractExtendedData> i = loader.iterator();
-		List<Class<? extends AbstractExtendedData>> classes = new ArrayList<Class<? extends AbstractExtendedData>>();
-		while (i.hasNext()) {
-			classes.add(i.next().getClass());
-		}
-		Class<?>[] classeToSerialize = classes.toArray(new Class[0]);
-
-		ser = new JaxbSerializer<IsoSignatureData>(IsoSignatureData.class, classeToSerialize, false, false);
-	}
-	private static JaxbSerializer<IsoSignatureData> ser;
+	private static JaxbSerializer<IsoSignatureData> ser = new JaxbSerializer<IsoSignatureData>(IsoSignatureData.class);
 
 	public static IsoSignatureData fromXmlDocument(String doc) {
 		return ser.deserialize(doc);
@@ -63,10 +68,10 @@ public class IsoSignatureData implements IBdi, Cloneable {
 
 	public static IsoSignatureData fromIso(byte[] isoData) {
 		IsoSignatureData ret = new IsoSignatureData();
-		ret.isoData=isoData;
+		ret.isoData = isoData;
 		return ret;
 	}
-	
+
 	public IsoIec19794Signature getIsoSignature() {
 		if (isoSignature == null)
 			try {
@@ -119,13 +124,13 @@ public class IsoSignatureData implements IBdi, Cloneable {
 		points = null;
 	}
 
-	public List<AbstractExtendedData> getExtendedDatas() {
+	public List<ExtendedData> getExtendedDatas() {
 		return extendedDatas;
 	}
 
 	private IsoIec19794Signature isoSignature = null;
 
-	public void setExtendedDatas(List<AbstractExtendedData> extendedDatas) {
+	public void setExtendedDatas(ArrayList<ExtendedData> extendedDatas) {
 		this.extendedDatas = extendedDatas;
 	}
 
@@ -138,7 +143,6 @@ public class IsoSignatureData implements IBdi, Cloneable {
 			if (signature == null) {
 				throw new NullPointerException("signature");
 			}
-			// signature.validate();
 			IsoHeader header = signature.getHeader();
 			CapturingComponent toAssign = new CapturingComponent();
 
@@ -292,8 +296,8 @@ public class IsoSignatureData implements IBdi, Cloneable {
 
 		for (ManagedIsoPoint packet : clearedPenPoints) {
 			IsoPoint point2 = new IsoPoint();
-			point2.putProp(Channel.X, packet.x);
-			point2.putProp(Channel.Y, packet.y);
+			point2.putProp(Channel.X, packet.getX());
+			point2.putProp(Channel.Y, packet.getY());
 			point2.putProp(Channel.F, (int) packet.getPressure());
 			point2.putProp(Channel.T, (int) packet.getTime());
 			if (deviceInformation.getZAxis().isSupported()) {

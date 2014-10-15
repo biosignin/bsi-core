@@ -1,9 +1,9 @@
-package eu.inn.java.extensions;
+package eu.inn.biometric.signature.device;
 
 /*
  * #%L
  * BioSignIn (Biometric Signature Interface) Core [http://www.biosignin.org]
- * RefObject.java is part of BioSignIn project
+ * Dimension.java is part of BioSignIn project
  * %%
  * Copyright (C) 2014 Innovery SpA
  * %%
@@ -23,16 +23,31 @@ package eu.inn.java.extensions;
  */
 
 
-public final class RefObject<T> {
-	public T argvalue;
+public class Dimension {
+	private int width;
+	private int height;
 
-	public RefObject(T refarg) {
-		argvalue = refarg;
+	public Dimension() {
 	}
-	public RefObject() {
+
+	public int getWidth() {
+		return width;
 	}
-	
-	public boolean isNull() {
-		return argvalue==null;
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public Dimension(int width, int height) {
+		this.width = width;
+		this.height = height;
 	}
 }

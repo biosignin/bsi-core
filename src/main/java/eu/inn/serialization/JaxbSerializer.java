@@ -1,129 +1,82 @@
 package eu.inn.serialization;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+/*
+ * #%L
+ * BioSignIn (Biometric Signature Interface) Core [http://www.biosignin.org]
+ * JaxbSerializer.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.io.StringWriter;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.SchemaOutputResolver;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.Result;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.transform.RegistryMatcher;
+
+import eu.inn.biometric.signature.extendeddata.ExtendedData;
 
 public class JaxbSerializer<T> {
-	private Marshaller marshaller;
+	private Serializer marshaller;
 
-	private Unmarshaller unmarshaller;
 	private Class<T> classType;
-	private boolean skipSerializer;
-	private boolean skipDeserializer;
 
 	public JaxbSerializer(Class<T> classe) {
-		this(classe, new Class<?>[] {}, false, false);
-	}
-
-	private String classToXsd(Class<?> c) {
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(c);
-			final ByteArrayOutputStream out = new ByteArrayOutputStream();
-			SchemaOutputResolver sor = new SchemaOutputResolver() {
-				@Override
-				public Result createOutput(String namespaceURI, String suggestedFileName) throws IOException {
-					StreamResult result = new StreamResult(out);
-					result.setSystemId("");
-					return result;
-				}
-			};
-			jaxbContext.generateSchema(sor);
-			out.flush();
-			ByteArrayInputStream bais = new ByteArrayInputStream(out.toByteArray());
-			byte[] stringBytes = new byte[out.size()];
-			Utils.readFully(bais, stringBytes);
-
-			return new String(stringBytes);
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	public JaxbSerializer(Class<T> classe, Class<?>[] referencedClass, boolean skipSerializer,
-			boolean skipDeserializer) {
 		classType = classe;
 		try {
-			JAXBContext context;
-
-			if (referencedClass == null) {
-				context = JAXBContext.newInstance(classType);
-			} else {
-				context = JAXBContext.newInstance((Class<?>[]) Utils.addAll(referencedClass,
-						new Class<?>[] { classe }));
-			}
-			this.skipDeserializer = skipDeserializer;
-			this.skipSerializer = skipSerializer;
-			if (!skipDeserializer) {
-				unmarshaller = context.createUnmarshaller();
-
-				StreamSource[] sources = new StreamSource[(referencedClass == null ? 0
-						: referencedClass.length) + 1];
-				sources[0] = new StreamSource(new StringReader(classToXsd(classe)));
-				int i = 1;
-				if (referencedClass != null)
-					for (Class<?> c : referencedClass) {
-						sources[i++] = new StreamSource(new StringReader(classToXsd(c)));
-					}
-
-				// TODO: da riaggiungere, 
-//				 unmarshaller.setSchema(factory.newSchema(sources));
-			}
-			if (!skipSerializer) {
-
-				marshaller = context.createMarshaller();
-				marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-			}
+//			Registry registry = new Registry();
+//			registry.bind(byte[].class, ByteArrayConverter.class);
+//			Strategy strategy = new RegistryStrategy(registry);
+			
+			
+			
+			RegistryMatcher m = new RegistryMatcher();
+			m.bind(byte[].class, new ByteArrayTransformer());
+			marshaller = new Persister(m);
+			
+			
 		} catch (Exception ex) {
-			throw new RuntimeException("Cannot instantiate JaxbSerializer for class: " + classType.getName(),
-					ex);
+			throw new RuntimeException("Cannot instantiate JaxbSerializer for class: " + classType.getName(), ex);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public T deserialize(File f) throws DeserializationException {
 		try {
-			if (skipDeserializer)
-				throw new IllegalStateException("JaxbSerializer created with no support for deserialization");
-			return (T) unmarshaller.unmarshal(f);
-		} catch (JAXBException ex) {
+			return marshaller.read(classType, f);
+		} catch (Exception ex) {
 			throw new DeserializationException(classType, "Cannot deserialize", f.getAbsolutePath(), ex);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public T deserialize(InputStream is) throws DeserializationException {
 		try {
-			if (skipDeserializer)
-				throw new IllegalStateException("JaxbSerializer created with no support for deserialization");
-			return (T) unmarshaller.unmarshal(is);
-		} catch (JAXBException ex) {
+			return marshaller.read(classType, is);
+		} catch (Exception ex) {
 			throw new DeserializationException(classType, "Cannot deserialize", ex);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public T deserialize(String s) throws DeserializationException {
-		if (skipDeserializer)
-			throw new IllegalStateException("JaxbSerializer created with no support for deserialization");
 		try {
-			StringReader sr = new StringReader(s);
-			return (T) unmarshaller.unmarshal(sr);
-		} catch (JAXBException ex) {
+			return marshaller.read(classType, s);
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new DeserializationException(classType, "Cannot deserialize", ex);
 		}
@@ -131,35 +84,18 @@ public class JaxbSerializer<T> {
 
 	public void serialize(File f, T object) throws SerializationException {
 		try {
-			if (skipSerializer)
-				throw new IllegalStateException("JaxbSerializer created with no support for serialization");
-			marshaller.marshal(object, f);
-		} catch (JAXBException ex) {
+			marshaller.write(object, f);
+		} catch (Exception ex) {
 			throw new SerializationException(classType, "Cannot serialize", f.getAbsolutePath(), ex);
 		}
 	}
 
 	public String serialize(T object) throws SerializationException {
-		return serialize(object, false);
-
-	}
-
-	public String serialize(T object, boolean forceIndentation) throws SerializationException {
 		try {
-			if (skipSerializer)
-				throw new IllegalStateException("JaxbSerializer created with no support for serialization");
 			StringWriter sr = new StringWriter();
-			marshaller.marshal(object, sr);
-			String ret = sr.toString();
-			if (forceIndentation) {
-				try {
-					ret = XmlUtil.getOuterXml(XmlUtil.loadXMLFromString(ret));
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			return ret;
-		} catch (JAXBException ex) {
+			marshaller.write(object, sr);			
+			return sr.toString();			
+		} catch (Exception ex) {
 			throw new SerializationException(classType, "Cannot serialize", ex);
 		}
 

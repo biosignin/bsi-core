@@ -1,5 +1,28 @@
 package eu.inn.biometric.signature.isoiec19794.y2007;
 
+/*
+ * #%L
+ * BioSignIn (Biometric Signature Interface) Core [http://www.biosignin.org]
+ * IsoIec19794Signature.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
 import java.io.ByteArrayOutputStream;
 
 import eu.inn.biometric.signature.isoiec19794.exception.ChannelAttributeOutOfBoundException;
@@ -92,18 +115,20 @@ public class IsoIec19794Signature {
 	}
 
 	public byte[] toBytes() throws Exception {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			;
-
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
 			byte[] buffer = this.header.toBytes();
 			baos.write(buffer, 0, buffer.length);
 			byte[] buffer2 = this.body.toBytes();
 			baos.write(buffer2, 0, buffer2.length);
-
 			baos.flush();
-			// baos.close();
-
 			return baos.toByteArray();
+		}
+		finally {
+			try {
+				baos.close();
+			}
+			catch (Exception ex) {}
 		}
 
 	}

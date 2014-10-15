@@ -1,10 +1,29 @@
 package eu.inn.biometric.signature.device;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.util.List;
+/*
+ * #%L
+ * BioSignIn (Biometric Signature Interface) Core [http://www.biosignin.org]
+ * SignArea.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
 
-import javax.xml.bind.annotation.XmlAttribute;
+
+import java.util.List;
 
 import eu.inn.biometric.signature.managed.ManagedIsoPoint;
 
@@ -58,22 +77,22 @@ public class SignArea {
 	private int _top;
 
 	public int getTop() {
-		return location.y + size.height;
+		return location.getY() + size.getHeight();
 	}
 
 	public int getHeight() {
-		return size.height;
+		return size.getHeight();
 	}
 
 	public int getWidth() {
-		return size.width;
+		return size.getWidth();
 	}
 
 
 	private int _bottom;
 
 	public int getBottom() {
-		return location.y;
+		return location.getY();
 	}
 
 	public void setBottom(int value) {
@@ -84,7 +103,7 @@ public class SignArea {
 	private int _left;
 
 	public int getLeft() {
-		return location.x;
+		return location.getX();
 	}
 
 	public void setLeft(int value) {
@@ -93,17 +112,17 @@ public class SignArea {
 	}
 
 	private void calculate() {
-		size.height = _top - location.y;
-		size.width = _right - location.x;
-		location.y = _bottom;
-		location.x = _left;
+		size.setHeight(_top - location.getY());
+		size.setWidth(_right - location.getX());
+		location.setY(_bottom);
+		location.setX(_left);
 
 	}
 
 	private int _right;
 
 	public int getRight() {
-		return location.x + size.width;
+		return location.getX() + size.getWidth();
 	}
 
 	public void setRight(int value) {
