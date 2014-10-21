@@ -23,7 +23,7 @@ package eu.inn.biometric.signature.managed;
  */
 
 
-import java.awt.Point;
+
 
 import eu.inn.biometric.signature.isoiec19794.y2007.Channel;
 import eu.inn.biometric.signature.isoiec19794.y2007.IsoPoint;
@@ -34,7 +34,11 @@ public class ManagedIsoPoint {
 	private int pressure;
 	private int x;
 	private int y;
-
+	@Override
+	public ManagedIsoPoint clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return (ManagedIsoPoint)super.clone();
+	}
 	public int getPressure() {
 		return pressure;
 	}
@@ -47,10 +51,6 @@ public class ManagedIsoPoint {
 		this.setX(x);
 		this.setY(y);
 		this.pressure = pressure;
-	}
-
-	public ManagedIsoPoint(Point p, int pressure) {
-		this(p.x, p.y, pressure);
 	}
 
 	public long getTime() {
