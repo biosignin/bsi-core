@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.inn.biometric.sign</groupId>
 	<artifactId>bsi-core</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<inceptionYear>2014</inceptionYear>
 	<description>BioSignIn (Biometric Signature Interface) Core</description>	
 	<organization>
@@ -101,7 +101,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -128,7 +128,7 @@
 		<connection>scm:git:ssh://github.com/biosignin/bsi-core.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/biosignin/bsi-core.git</developerConnection>
 		<url>https://github.com/biosignin/bsi-core</url>
-		<tag>HEAD</tag>
+		<tag>v0.0.2</tag>
 	</scm>
 	<distributionManagement>
 		<repository>
