@@ -31,6 +31,8 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.transform.RegistryMatcher;
 
+import eu.inn.biometric.signature.crypto.ICryptoProvider;
+
 public class XmlSerializer<T> {
 	private Serializer marshaller;
 

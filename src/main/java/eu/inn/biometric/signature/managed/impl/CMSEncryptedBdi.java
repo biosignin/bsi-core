@@ -37,7 +37,7 @@ import eu.inn.serialization.ByteArrayTransformer;
 
 public class CMSEncryptedBdi<T extends IBdi> implements IEncryptedBdi<T> {
 	private PrivateKey pKey = null;
-	private static ICryptoProvider provider = null;
+	public static ICryptoProvider provider = null;
 	static {
 		try {
 			ServiceLoader<ICryptoProvider> loader = ServiceLoader.load(ICryptoProvider.class,
@@ -46,11 +46,16 @@ public class CMSEncryptedBdi<T extends IBdi> implements IEncryptedBdi<T> {
 			provider.addProvider();
 		} catch (Exception e) {
 			System.err.println("No CryptoProvider defined");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	private byte[] cmsBytes;
 
+	public static void setCryptoProvider(ICryptoProvider p)
+	{
+		provider = p;
+		provider.addProvider();
+	}
 	public static <T extends IBdi> CMSEncryptedBdi<T> fromCMSbytes(byte[] cmsBytes) {
 		CMSEncryptedBdi<T> ret = new CMSEncryptedBdi<T>();
 		ret.cmsBytes = cmsBytes;
@@ -91,6 +96,7 @@ public class CMSEncryptedBdi<T extends IBdi> implements IEncryptedBdi<T> {
 			Integer maxKeyLength) throws Exception {
 		if (sdc.isEncrypted())
 			throw new IllegalStateException("Object is already encrypted");
+		
 		return CMSEncryptedBdi.fromCMSbytes(provider.encrypt(sdc.toOutput().getBytes("UTF-8"), certificate,
 				maxKeyLength));
 
