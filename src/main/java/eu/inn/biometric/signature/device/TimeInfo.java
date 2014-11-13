@@ -27,7 +27,7 @@ package eu.inn.biometric.signature.device;
 public class TimeInfo {
 	private boolean fixedSamplingRate;
 	private int samplingRatePointsPerSecond;
-	private boolean supported;
+	private boolean supported = true;
 	private boolean timeSupportDuringAirMoves;
 	
 	TimeInfo() {
