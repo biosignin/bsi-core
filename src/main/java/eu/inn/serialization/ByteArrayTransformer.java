@@ -28,6 +28,7 @@ import java.util.ServiceLoader;
 import org.simpleframework.xml.transform.Transform;
 
 import eu.inn.biometric.signature.crypto.ICryptoProvider;
+import eu.inn.biometric.signature.managed.impl.CMSEncryptedBdi;
 
 public class ByteArrayTransformer implements Transform<byte[]> {
 
@@ -40,7 +41,9 @@ public class ByteArrayTransformer implements Transform<byte[]> {
 			provider = loader.iterator().next();
 		} catch (Exception e) {
 			System.err.println("No CryptoProvider defined");
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("PRENDO IL PROVIDER SETTATO IN CMSEncryptedBdi");
+			provider =CMSEncryptedBdi.provider;
 		}
 
 	}

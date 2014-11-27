@@ -99,6 +99,9 @@ public class IsoSignatureData implements IBdi, Cloneable {
 		try {
 			return ser.serialize(this);
 		} catch (Throwable t) {
+			
+			t.printStackTrace();
+			
 			throw new RuntimeException(t);
 		}
 	}
