@@ -117,8 +117,8 @@
 		</dependency>
 	</dependencies>
 	<scm>
-		<connection>scm:git:git://github.com/biosignin/bsi-core.git</connection>
-		<developerConnection>scm:git:git://git@github.com/biosignin/bsi-core.git</developerConnection>
+		<connection>scm:git:git@github.com/biosignin/bsi-core.git</connection>
+		<developerConnection>scm:git:git@github.com/biosignin/bsi-core.git</developerConnection>
 		<url>https://github.com/biosignin/bsi-core</url>
 		<tag>v0.0.3</tag>
 	</scm>
