@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.inn.biometric.sign</groupId>
 	<artifactId>bsi-core</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<inceptionYear>2014</inceptionYear>
 	<description>BioSignIn (Biometric Signature Interface) Core</description>	
 	<organization>
