@@ -54,7 +54,7 @@
 				<version>2.4.1</version>
 				<configuration>
 					<tagNameFormat>v@{project.version}</tagNameFormat>
-					<releaseProfiles>release</releaseProfiles>
+<!-- 					<releaseProfiles>release</releaseProfiles> -->
 					<preparationGoals>clean verify</preparationGoals>
 					<goals>deploy site</goals>
 				</configuration>
