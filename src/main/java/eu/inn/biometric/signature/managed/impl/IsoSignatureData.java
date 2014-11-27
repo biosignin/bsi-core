@@ -296,8 +296,8 @@ public class IsoSignatureData implements IBdi, Cloneable {
 
 		for (ManagedIsoPoint packet : clearedPenPoints) {
 			IsoPoint point2 = new IsoPoint();
-			point2.putProp(Channel.X, packet.getX());
-			point2.putProp(Channel.Y, packet.getY());
+			point2.putProp(Channel.X, (int)Math.round(packet.getX()));
+			point2.putProp(Channel.Y, (int)Math.round(packet.getY()));
 			point2.putProp(Channel.F, (int) packet.getPressure());
 			point2.putProp(Channel.T, (int) packet.getTime());
 			if (deviceInformation.getZAxis().isSupported()) {

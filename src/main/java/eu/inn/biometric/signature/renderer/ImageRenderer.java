@@ -30,19 +30,21 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 import java.util.List;
 
 import eu.inn.biometric.signature.managed.ManagedIsoPoint;
 
 public class ImageRenderer {
 
-	public static void drawPoints(List<? extends ManagedIsoPoint> points, Graphics2D graphics,
+	public static void drawPoints(Double ratio, List<? extends ManagedIsoPoint> points, Graphics2D graphics,
 			Color penColor, Point offset, float maxTickness, float maxPressure) {
-		drawPoints(points, graphics, penColor, offset, maxTickness, 0.5f, maxPressure);
+		drawPoints(ratio,points, graphics, penColor, offset, maxTickness, 0.5f, maxPressure);
 	}
 
-	public static void drawPoints(List<? extends ManagedIsoPoint> points, Graphics2D graphics,
+	public static void drawPoints(Double ratio, List<? extends ManagedIsoPoint> points, Graphics2D graphics,
 			Color penColor, Point offset, float maxTickness, float minTickness, float maxPressure) {
+		
 		if (maxTickness - minTickness <= 0)
 			throw new IllegalArgumentException(String.format(
 					"maxTickness [%s] must be greater then minTickness [%s]", maxTickness, minTickness));
@@ -54,13 +56,42 @@ public class ImageRenderer {
 			ManagedIsoPoint localPenPoint2 = points.get(i - 1);
 			if ((localPenPoint1.getPressure() > 0) && (localPenPoint2.getPressure() > 0)) {
 				graphics.setStroke(new BasicStroke((strokeRange * localPenPoint1.getPressure() / maxPressure)
-						+ minTickness));
-				double j = localPenPoint2.getX() - offset.getX();
-				double k = localPenPoint2.getY() - offset.getY();
-				double m = localPenPoint1.getX() - offset.getX();
-				double n = localPenPoint1.getY() - offset.getY();
-				Shape l = new Line2D.Double(j, k, m, n);
-				graphics.draw(l);
+						+ minTickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+//				graphics.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+				double x1 = localPenPoint2.getX()*ratio - offset.getX();
+				double y1 = localPenPoint2.getY()*ratio - offset.getY();
+				double x2 = localPenPoint1.getX()*ratio - offset.getX();
+				double y2 = localPenPoint1.getY()*ratio - offset.getY();
+//				if (i==points.size()-1 || points.get(i+1).getPressure()==0){
+				if (true){
+					Shape l = new Line2D.Double(x1, y1, x2, y2);
+					graphics.draw(l);
+				}
+				else {
+					System.err.println("SPLINE");
+					ManagedIsoPoint localPenPoint3 = points.get(i+1);
+					double x3 = localPenPoint3.getX()*ratio - offset.getX();
+					double y3 = localPenPoint3.getY()*ratio - offset.getY();
+					double 			cx1a = x1 + (x2 - x1) / 3;
+					double 			cy1a = y1 + (y2 - y1) / 3;
+					double 			cx1b = x2 - (x3 - x1) / 3;
+					double 			cy1b = y2 - (y3 - y1) / 3;
+					double 			cx2a = x2 + (x3 - x1) / 3;
+					double 		cy2a = y2 + (y3 - y1) / 3;
+					double 			cx2b = x3 - (x3 - x2) / 3;
+					double 		cy2b = y3 - (y3 - y2) / 3;
+					Path2D.Double path1 = new Path2D.Double();
+					path1.moveTo(x1, y1);
+					path1.curveTo(cx1a, cy1a, cx1b, cy1b, x2, y2);
+					path1.curveTo(cx2a, cy2a, cx2b, cy2b, x3, y3);
+					graphics.draw(path1);					
+				}
+					
+//				Path2D.Double path = new Path2D.Double();
+//				path.moveTo(j, k);
+//				path.curveTo(cx1a, cy1a, cx1b, cy1b, x2, y2);
+//				Shape l = new Line2D.Double(j, k, m, n);
+//				graphics.draw(l);
 			}
 		}
 	}

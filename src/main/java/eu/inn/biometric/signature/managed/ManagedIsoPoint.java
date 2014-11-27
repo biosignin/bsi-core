@@ -32,8 +32,8 @@ public class ManagedIsoPoint {
 
 	private long time = System.currentTimeMillis();
 	private int pressure;
-	private int x;
-	private int y;
+	private double x;
+	private double y;
 	@Override
 	public ManagedIsoPoint clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
@@ -43,11 +43,11 @@ public class ManagedIsoPoint {
 		return pressure;
 	}
 
-	public ManagedIsoPoint(int x, int y) {
+	public ManagedIsoPoint(double x, double y) {
 		this(x, y, 0);
 	}
 
-	public ManagedIsoPoint(int x, int y, int pressure) {
+	public ManagedIsoPoint(double x, double y, int pressure) {
 		this.setX(x);
 		this.setY(y);
 		this.pressure = pressure;
@@ -80,19 +80,25 @@ public class ManagedIsoPoint {
 		this.y = y.intValue();
 	}
 
-	public int getX() {
+	public double getX() {
 		return x;
 	}
+	public int getXAsInt() {
+		return (int)Math.round(x);
+	}
 
-	public void setX(int x) {
+	public void setX(double x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
+	public int getYAsInt() {
+		return (int)Math.round(y);
+	}
 
-	public void setY(int y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 
