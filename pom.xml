@@ -56,7 +56,7 @@
 					<tagNameFormat>v@{project.version}</tagNameFormat>
 <!-- 					<releaseProfiles>release</releaseProfiles> -->
 					<preparationGoals>clean verify</preparationGoals>
-					<goals>deploy site</goals>
+					<goals>deploy</goals>
 				</configuration>
 				<dependencies>
 					<dependency>
