@@ -85,19 +85,11 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>
-											org.codehaus.mojo
-										</groupId>
-										<artifactId>
-											license-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.7,)
-										</versionRange>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>license-maven-plugin</artifactId>
+										<versionRange>[1.7,)</versionRange>
 										<goals>
-											<goal>
-												update-file-header
-											</goal>
+											<goal>update-file-header</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
