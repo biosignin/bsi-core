@@ -88,7 +88,7 @@ public class IsoSignatureData implements IBdi, Cloneable {
 		if (points == null) {
 			List<ManagedIsoPoint> ret = new ArrayList<ManagedIsoPoint>();
 			for (IsoPoint p : getIsoSignature().getBody().getPoints())
-				ret.add(ManagedIsoPoint.fromIsoPoint(p));
+				ret.add(ManagedIsoPoint.fromIsoPoint(p, getIsoSignature().getHeader()));
 
 			points = ret;
 		}
@@ -200,9 +200,9 @@ public class IsoSignatureData implements IBdi, Cloneable {
 						lastPoint = i;
 						continue;
 					}
-					if (lastPoint.getProperty(Channel.F) == 0)
+					if (lastPoint.getProperty(Channel.F) >= 0)
 						continue;
-					if (i.getProperty(Channel.F) > 0) {
+					if (i.getProperty(Channel.F) == 0) {
 						if ((!lastPoint.getProperty(Channel.X).equals(i.getProperty(Channel.X)) || (!lastPoint
 								.getProperty(Channel.Y).equals(i.getProperty(Channel.Y))))) {
 							airMoveSupported = true;
@@ -248,13 +248,13 @@ public class IsoSignatureData implements IBdi, Cloneable {
 		double height = Math
 				.ceil((double) (((double) (deviceInformation.getSignArea().getTop() - deviceInformation.getSignArea()
 						.getBottom())) / (((((double) deviceInformation.getRealSize().getDimension().getHeight()) / 72.0) * 2.54) / 100.0)));
-		if (width > 32767.0) {
-			scalingRatioX = 32767.0 / width;
-			width = 32767.0;
+		if (width >  Channel.X.getMaxValue()) {
+			scalingRatioX = Channel.X.getMaxValue() / width;
+			width =  Channel.X.getMaxValue();
 		}
-		if (height > 32767.0) {
-			scalingRatioY = 32767.0 / height;
-			height = 32767.0;
+		if (height >  Channel.Y.getMaxValue()) {
+			scalingRatioY = Channel.Y.getMaxValue() / height;
+			height = Channel.Y.getMaxValue();
 		}
 		ChannelDescription descX = new ChannelDescription(Channel.X);
 		signature.getHeader().putChannel(Channel.X, descX);

@@ -49,7 +49,8 @@ public class ImageRenderer {
 			throw new IllegalArgumentException(String.format(
 					"maxTickness [%s] must be greater then minTickness [%s]", maxTickness, minTickness));
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		graphics.setColor(penColor);
+		graphics.setColor(penColor);		
+//		graphics.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		float strokeRange = maxTickness - minTickness;
 		for (int i = 1; i < points.size(); i++) {
 			ManagedIsoPoint localPenPoint1 = points.get(i);
@@ -66,6 +67,7 @@ public class ImageRenderer {
 				if (true){
 					Shape l = new Line2D.Double(x1, y1, x2, y2);
 					graphics.draw(l);
+//					graphics.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
 				}
 				else {
 					System.err.println("SPLINE");

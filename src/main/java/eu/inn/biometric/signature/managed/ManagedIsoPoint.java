@@ -26,6 +26,7 @@ package eu.inn.biometric.signature.managed;
 
 
 import eu.inn.biometric.signature.isoiec19794.y2007.Channel;
+import eu.inn.biometric.signature.isoiec19794.y2007.IsoHeader;
 import eu.inn.biometric.signature.isoiec19794.y2007.IsoPoint;
 
 public class ManagedIsoPoint {
@@ -61,7 +62,8 @@ public class ManagedIsoPoint {
 		this.time = time;
 	}
 
-	public static ManagedIsoPoint fromIsoPoint(IsoPoint p) {
+	public static ManagedIsoPoint fromIsoPoint(IsoPoint p, IsoHeader header) {
+		//int time = (int)Math.round(p.getProperty(Channel.T)/header.getChannel(Channel.T).getAttribute(ChannelAttribute.SCALING_VALUE)); <-- next vers
 		int time = p.getProperty(Channel.T);
 		int x = p.getProperty(Channel.X);
 		int y = p.getProperty(Channel.Y);

@@ -57,7 +57,8 @@ public class IsoPoint {
 				continue;
 			}
 			int value = (((isoData[offset + length] << 8) & 0xFF00)
-					| (isoData[(offset + length) + 1] & 0xFF))+key.getMinValue();			
+					| (isoData[(offset + length) + 1] & 0xFF))+key.getMinValue();	
+			//TODO: useScale??? maybe yes
 			point.properties.put(key, value);
 			length += 2;
 		}
