@@ -54,7 +54,7 @@ import eu.inn.serialization.XmlSerializer;
 @Root
 public class IsoSignatureData implements IBdi, Cloneable {
 
-	@ElementList()	
+	@ElementList()
 	private ArrayList<ExtendedData> extendedDatas = new ArrayList<ExtendedData>();
 
 	@Element
@@ -63,6 +63,7 @@ public class IsoSignatureData implements IBdi, Cloneable {
 	private static XmlSerializer<IsoSignatureData> ser = new XmlSerializer<IsoSignatureData>(IsoSignatureData.class);
 
 	public static IsoSignatureData fromXmlDocument(String doc) {
+		doc = doc.replace("<extendedDatas><isoData>","<extendedDatas /><isoData>");
 		return ser.deserialize(doc);
 	}
 
@@ -99,9 +100,9 @@ public class IsoSignatureData implements IBdi, Cloneable {
 		try {
 			return ser.serialize(this);
 		} catch (Throwable t) {
-			
+
 			t.printStackTrace();
-			
+
 			throw new RuntimeException(t);
 		}
 	}
