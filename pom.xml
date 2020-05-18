@@ -4,7 +4,7 @@
 	<artifactId>bsi-core</artifactId>
 	<version>0.0.5-SNAPSHOT</version>
 	<inceptionYear>2014</inceptionYear>
-	<description>BioSignIn (Biometric Signature Interface) Core</description>	
+	<description>BioSignIn (Biometric Signature Interface) Core</description>
 	<organization>
 		<name>Innovery SpA</name>
 		<url>http://www.biosignin.org</url>
@@ -14,8 +14,8 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
