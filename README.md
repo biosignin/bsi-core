@@ -1,14 +1,14 @@
 #Biometric Signature Interface
 Biometric Signature Interface (aka `bsi-core`) is a java library for manipulating Signature/sign time series data according to [ISO/IEC 19794-7:2007](http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=38751)
 
-##What can you do
+## What you can do
 * You can import from ISO
 * You can build your own ISO from a list of [`ManagedIsoPoint`](src/main/java/eu/inn/biometric/signature/managed/ManagedIsoPoint.java) captured (Capturing will be in the scope of next projects so... stay tuned)
 * You can build a generic structure where include your ISO and a list of custom extended data (like [`AdditionalHashInfo`](src/main/java/eu/inn/biometric/signature/extendeddata/impl/AdditionalHashInfo.java))
 * You can encrypt/decrypt those structures using [`CMS PKCS7 standards`](https://en.wikipedia.org/wiki/Cryptographic_Message_Syntax)
 
-##Examples
-####Import/Export from ISO
+## Examples
+#### Import/Export from ISO
 ```java
 import eu.inn.biometric.signature.device.CapturingComponent;
 import eu.inn.biometric.signature.managed.ManagedIsoPoint;
@@ -25,7 +25,7 @@ byte[] toIso(List<ManagedIsoPoint> points, CapturingComponent componentInfo){
     return iso.getIsoData(); //pure byte[] iso
 }
 ```
-####Enrich with your own data
+#### Enrich with your own data
 1) Let's define your custom data
 
 ```java
@@ -84,7 +84,7 @@ void enrich(IsoSignatureData iso){
     <isoData>MIAGCSqGSIb3DQEHA6CAMIACAQAxg3MQswCQ........5w7LEtmv6OqFXiGbN9nf9vmAAAAAAAAAAAAAA=</isoData>
 </isoSignatureData>
 ```
-####Encrypt/Decrypt
+#### Encrypt/Decrypt
 ```java
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
@@ -102,12 +102,12 @@ void decrypt(byte[] encryptedBytes, PrivateKey privateKey) {
 	IsoSignatureData dec = enc.decrypt(IsoSignatureData.class);
 }
 ```
-##Requirements
+## Requirements
 * Java6
 * [Simple Xml Serialization](http://simple.sourceforge.net/)
 * [BSI Crypto Provider based on BC](https://github.com/biosignin/bc-crypto-bsi) (optional)
 
-#####Include in your maven project
+##### Include in your maven project
 ```xml
 <project>
 	[.......]
@@ -129,7 +129,7 @@ void decrypt(byte[] encryptedBytes, PrivateKey privateKey) {
 		<repository>
 			<id>InnoveryRelease</id>
 			<name>Innovery Public Releases</name>
-			<url>http://developers.innovery.net/artifactory/public-release</url>
+			<url>https://developers.innovery.net/artifactory/public-release</url>
 		</repository>
 	</distributionManagement>
 </project>
